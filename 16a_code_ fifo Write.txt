@@ -1,0 +1,30 @@
+/*   There are two programs that use the same FIFO. Program 1 writes first, then reads. The program 2 reads first, then writes. 
+They both keep doing it until terminated.  */
+
+#include <stdio.h>
+#include <string.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+
+int main()
+{
+    int fd;
+    char * myfifo = "/tmp/myfifo";
+    mkfifo(myfifo, 0666);
+
+    char arr1[80], arr2[80];
+    while (1)
+    {
+        fd = open(myfifo, O_WRONLY);
+
+        fgets(arr2, 80, stdin);
+        write(fd, arr2, strlen(arr2)+1);
+        close(fd);
+        fd = open(myfifo, O_RDONLY);
+        read(fd, arr1, sizeof(arr1));
+        printf("User2: %s\n", arr1);
+        close(fd);
+}
+}

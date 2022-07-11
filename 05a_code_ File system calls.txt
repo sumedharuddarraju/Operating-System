@@ -1,0 +1,25 @@
+/*    C program using open, read, write, close, fcntl, seek, stat, opendir, readdir system calls  */
+
+#include<sys/stat.h>
+#include<stdio.h>
+#include<fcntl.h>
+#include<sys/types.h>
+int main()
+{
+int n,i=0;
+int f1,f2;
+char c,str[100];
+f1=open(“sample2.txt”,O_RDWR|O_CREAT|O_TRUNC);
+while((c=getchar())!=’\n’)
+{
+str[i++]=c;
+}
+str[i]=’\0’;
+write(f1,str,i);
+close(f1);
+f2=open(“sample2.txt”,O_RDONLY);
+read(f2,str,0);
+printf(“\n%s\n”,str);
+close(f2);
+return 0;
+}
